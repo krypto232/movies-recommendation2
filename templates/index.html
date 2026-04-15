@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Recommender 🎬</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #141414;
+            color: white;
+            text-align: center;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #e50914;
+        }
+
+        input {
+            width: 300px;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        button {
+            padding: 10px 15px;
+            background: #e50914;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .movies {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: #222;
+            padding: 15px;
+            border-radius: 10px;
+            width: 150px;
+        }
+
+        .title {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🎬 Movie Recommender System</h1>
+
+<form action="/recommend" method="POST">
+    <input list="movies" name="movie" placeholder="Search movie...">
+
+    <datalist id="movies">
+        {% for movie in movie_list %}
+        <option value="{{ movie }}">
+        {% endfor %}
+    </datalist>
+
+    <button type="submit">Recommend</button>
+</form>
+
+
+{% if recommendations %}
+<div class="movies">
+    {% for movie in recommendations %}
+    <div class="card">
+        <div class="title">{{ movie }}</div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+</body>
+</html>
