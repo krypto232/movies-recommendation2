@@ -3,33 +3,41 @@ import pickle
 
 app = Flask(__name__)
 
-# load data
+# -----------------------
+# LOAD DATA
+# -----------------------
 movies = pickle.load(open("movies.pkl", "rb"))
-similarity = pickle.load(open("similarity.pkl", "rb"))
+similarity = pickle.load(open("similarity_small.pkl", "rb"))
 
 movie_list = movies['title'].values
 
 
-# recommendation function
+# -----------------------
+# RECOMMEND FUNCTION
+# -----------------------
 def recommend(movie):
     index = movies[movies['title'] == movie].index[0]
-    distances = sorted(list(enumerate(similarity[index])), reverse=True, key=lambda x: x[1])
+    indices = similarity[index]
 
     recommended_movies = []
 
-    for i in distances[1:6]:
-        recommended_movies.append(movies.iloc[i[0]].title)
+    for i in indices:
+        recommended_movies.append(movies.iloc[i].title)
 
     return recommended_movies
 
 
-# home page
+# -----------------------
+# HOME PAGE
+# -----------------------
 @app.route("/")
 def home():
     return render_template("index.html", movie_list=movie_list)
 
 
-# recommendation route
+# -----------------------
+# RECOMMEND ROUTE
+# -----------------------
 @app.route("/recommend", methods=["POST"])
 def get_recommendation():
     movie = request.form.get("movie")
@@ -42,5 +50,8 @@ def get_recommendation():
     )
 
 
+# -----------------------
+# RUN APP
+# -----------------------
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=10000)
